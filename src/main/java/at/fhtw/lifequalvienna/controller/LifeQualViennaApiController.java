@@ -3,11 +3,9 @@ package at.fhtw.lifequalvienna.controller;
 
 import at.fhtw.lifequalvienna.model.Response;
 import at.fhtw.lifequalvienna.service.LifeQualViennaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/lifequalvienna")
 public class LifeQualViennaApiController {
