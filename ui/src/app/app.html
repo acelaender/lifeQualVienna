@@ -1,0 +1,19 @@
+<h1>Enter Adress</h1>
+<form (submit)="onSubmit($event)">
+  <label>
+    <input type="text" [(ngModel)]="adress" name="adress" required />
+  </label>
+  <button type="submit">Enter</button>
+</form>
+
+@if(result) {
+  <div>
+    <p>{{ result?.adress }}</p>
+    <p>{{ result?.grade }}</p>
+  </div>
+}
+@if(error) {
+  {{ error }}
+}
+
+<router-outlet />
