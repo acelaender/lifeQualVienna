@@ -12,6 +12,15 @@
     <p>{{ result?.grade }}</p>
   </div>
 }
+@if(suggestions) {
+  <ul>
+    @for (suggestion of suggestions; track suggestion.adress){
+      <li>
+        {{ suggestion.adress }}, {{ suggestion.bezirk }}
+      </li>
+    }
+  </ul>
+}
 @if(error) {
   {{ error }}
 }

@@ -8,6 +8,15 @@ export interface LifeQualResponse {
   grade: number;
 }
 
+export interface Place {
+  adress: string;
+  bezirk: string;
+  municipality: string;
+  category: string;
+  x: number;
+  y: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,5 +31,11 @@ export class AdressService {
       .set('adress', adress)
       .set('userType', userType);
     return this.http.get<LifeQualResponse>(this.apiUrl, { params });
+  }
+
+  getPlace(adress: string): Observable<Place[]> {
+    const params = new HttpParams()
+      .set('adress', adress)
+    return this.http.get<Place[]>(this.apiUrl + '/suggestion', { params });
   }
 }
