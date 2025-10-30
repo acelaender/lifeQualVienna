@@ -2,7 +2,7 @@ import {Component, inject, signal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { provideHttpClient } from '@angular/common/http';
-import {AdressService, LifeQualResponse} from './adress-service';
+import {AdressService, LifeQualResponse, Place} from './adress-service';
 import {FormsModule} from '@angular/forms';
 
 @Component({
@@ -19,10 +19,11 @@ import {FormsModule} from '@angular/forms';
 export class App {
   adressService = inject(AdressService);
   adress = '';
+  suggestions: Place[] = [];
   result?: LifeQualResponse;
   error?: string;
 
-  onSubmit(event: Event) {
+  onSthg(event: Event) {
     event.preventDefault();
     this.adressService.getGrade(this.adress, "test")
       .subscribe({
@@ -31,5 +32,13 @@ export class App {
       });
   }
 
+  onSubmit(event: Event) {
+    event.preventDefault();
+    this.adressService.getPlace(this.adress)
+      .subscribe({
+        next: (res) => this.suggestions = res,
+        error: (err) => this.error = err.error?.error() || 'something went wrong'
+      });
+  }
 
 }
