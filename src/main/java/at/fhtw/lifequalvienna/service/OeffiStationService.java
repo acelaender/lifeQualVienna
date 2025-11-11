@@ -2,9 +2,7 @@ package at.fhtw.lifequalvienna.service;
 
 
 import at.fhtw.lifequalvienna.model.Station;
-import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
@@ -16,13 +14,13 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class QualityDataCollectionService {
+public class OeffiStationService {
     private final List<Station> stations = new ArrayList<Station>();
 
-    private AirQualityService airQualityService;
+    private GeoService geoService;
 
-    public QualityDataCollectionService(AirQualityService airQualityService) {
-        this.airQualityService = airQualityService;
+    public OeffiStationService(GeoService geoService) {
+        this.geoService = geoService;
     }
 
     @PostConstruct
@@ -56,23 +54,14 @@ public class QualityDataCollectionService {
         } catch (Exception e) {
             System.err.println("couldnt parse Oeffi-Stations: ERROR: " + e.getMessage());
         }
-        airQualityService.getPollutionScore(0, 0);
     }
 
 
 
     public Station findNearest(double lon, double lat) {
         return stations.stream()
-                .min(Comparator.comparingDouble(s -> distance(lon, lat, s.getLon(), s.getLat())))
+                .min(Comparator.comparingDouble(s -> geoService.distance(lon, lat, s.getLon(), s.getLat())))
                 .orElse(null);
-    }
-
-    private static double distance(double lon1, double lat1, double lon2, double lat2) {
-        double a = Math.abs(lat2 - lat1);
-        double b = Math.abs(lon2 - lon1);
-
-        double res = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-        return res;
     }
     //public getOeffiDistance()
 

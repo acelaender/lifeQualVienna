@@ -17,6 +17,11 @@ import java.util.Map;
 @Service
 public class AirQualityService {
     private final List<WeatherStation> weatherStations = new ArrayList<>();
+    private GeoService geoService;
+
+    public AirQualityService(GeoService geoService) {
+        this.geoService = geoService;
+    }
 
     private static final List<Pollutant> POLL_WEIGHED = List.of(
             new Pollutant("PM25", 0.25, 10, 35), //Spaltenindex 16
@@ -49,7 +54,7 @@ public class AirQualityService {
                 try {
                     String id = line[0].trim();
                     String name = line[3].trim();
-                    var coords = parsePoint(line[2]);
+                    var coords = geoService.parsePoint(line[2]);
                     double lon = coords[0];
                     double lat = coords[1];
                     weatherStations.add(new WeatherStation(id, name, lat, lon));
@@ -160,33 +165,7 @@ public class AirQualityService {
 
     private WeatherStation getNearestStation(double lon, double lat) {
         return weatherStations.stream()
-                .min(Comparator.comparingDouble(s -> distance(lon, lat, s.getLon(), s.getLat())))
+                .min(Comparator.comparingDouble(s -> geoService.distance(lon, lat, s.getLon(), s.getLat())))
                 .orElse(null);
     }
-
-    //Helper function if needed again -> put func into Coordinate Converter
-    private static double[] parsePoint(String point) {
-        if (point == null || !point.startsWith("POINT")) {
-            throw new IllegalArgumentException("Invalid POINT format: " + point);
-        }
-
-        // Extract the content inside the parentheses
-        String coords = point.substring(point.indexOf('(') + 1, point.indexOf(')'));
-        String[] parts = coords.trim().split("\\s+");
-
-        double lon = Double.parseDouble(parts[0]);
-        double lat = Double.parseDouble(parts[1]);
-
-        return new double[]{lon, lat};
-    }
-
-    //TODO at this point put all the coor funcs into a helper class
-    private static double distance(double lon1, double lat1, double lon2, double lat2) {
-        double a = Math.abs(lat2 - lat1);
-        double b = Math.abs(lon2 - lon1);
-
-        double res = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-        return res;
-    }
-
 }
