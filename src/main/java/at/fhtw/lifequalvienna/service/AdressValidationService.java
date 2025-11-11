@@ -67,6 +67,8 @@ public class AdressValidationService {
                         y
                 );
 
+                new ParkService();
+
                 suggestions.add(place);
             }
 
