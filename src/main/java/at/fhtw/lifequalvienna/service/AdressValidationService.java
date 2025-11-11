@@ -17,7 +17,7 @@ import java.util.Map;
 public class AdressValidationService {
     private final WebClient webClient = WebClient.create("https://data.wien.gv.at/daten/OGDAddressService.svc");
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final CoordinateConverter coordinateConverter = new CoordinateConverter();
+    private final GeoService geoService = new GeoService();
 
     public List<Place> findPlace(String adress) {
         try {
@@ -50,7 +50,7 @@ public class AdressValidationService {
                 double x;
                 double y;
                 if(coords != null && coords.size() >= 2){
-                    ProjCoordinate coor =  CoordinateConverter.toWgs84(coords.get(0), coords.get(1));
+                    ProjCoordinate coor =  GeoService.toWgs84(coords.get(0), coords.get(1));
                     x = coor.x;
                     y = coor.y;
                 } else {
