@@ -76,7 +76,7 @@ public class OeffiStationService {
 
         double distance = geoService.distance(lon, lat, nearestStation.getLon(), nearestStation.getLat());
 
-        score.setExplanation(score.getExplanation() + ", which is " + distance + "m away. This results in a Public transpo score of: ");
+        score.setExplanation(score.getExplanation() + ", which is " + (int) distance + "m away. This results in a Public transpo score of: ");
 
 
         if(distance >= MAX_DISTANCE) {
@@ -86,7 +86,7 @@ public class OeffiStationService {
             score.setScore(norm * 100);
         }
 
-        score.setExplanation(score.getExplanation() + score.getScore() + "%");
+        score.setExplanation(score.getExplanation() + (int) score.getScore() + "%");
 
         return score;
     }
