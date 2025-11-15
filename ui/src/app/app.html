@@ -6,21 +6,37 @@
   <button type="submit">Enter</button>
 </form>
 
-@if(result) {
-  <div>
-    <p>{{ result?.adress }}</p>
-    <p>{{ result?.grade }}</p>
-  </div>
-}
-@if(suggestions) {
+@if(suggestions.length > 0) {
+  <h2>Select one of the adresses</h2>
   <ul>
-    @for (suggestion of suggestions; track suggestion.adress){
-      <li>
-        {{ suggestion.adress }}, {{ suggestion.bezirk }}
+    @for(s of suggestions; track s.adress) {
+      <li (click)="selectPlace(s)" [class.selected]="selectedPlace === s">
+        {{ s.adress }} {{ s.bezirk }}
       </li>
     }
   </ul>
 }
+
+@if (selectedPlace) {
+  <h2>Select a User Type</h2>
+  <select [(ngModel)]="userType" name="usertype">
+    <option value="student">Student</option>
+    <option value="family">Family</option>
+    <option value="petowner">Professional</option>
+  </select>
+
+  <button (click)="onCalculate()">Calculate Quality</button>
+}
+
+@if(result) {
+  <div>
+    <p>{{ result?.adress }}</p>
+    <p>{{ result?.grade }}</p>
+    <p>{{ result?.userType }}</p>
+    <p>{{ result?.explanation }}</p>
+  </div>
+}
+
 @if(error) {
   {{ error }}
 }

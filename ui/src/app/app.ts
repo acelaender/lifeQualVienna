@@ -19,26 +19,37 @@ import {FormsModule} from '@angular/forms';
 export class App {
   adressService = inject(AdressService);
   adress = '';
+
   suggestions: Place[] = [];
+  selectedPlace?: Place;
+
+  userType = 'student';
   result?: LifeQualResponse;
   error?: string;
-
-  onSthg(event: Event) {
-    event.preventDefault();
-    this.adressService.getGrade(this.adress, "test")
-      .subscribe({
-        next: (res) => this.result = res,
-        error: (err) => this.error = err.error?.error() || 'Error'
-      });
-  }
 
   onSubmit(event: Event) {
     event.preventDefault();
     this.adressService.getPlace(this.adress)
       .subscribe({
         next: (res) => this.suggestions = res,
-        error: (err) => this.error = err.error?.error() || 'something went wrong'
+        error: (err) => this.error = err.error?.error() || 'Could not fetch adresses'
       });
   }
 
+  selectPlace(place: Place) {
+    this.selectedPlace = place;
+  }
+
+  onCalculate() {
+    if(!this.selectedPlace) {
+      this.error = 'Please choose one of the provided adresses first'
+      return;
+    }
+
+    this.adressService.getGrade(this.selectedPlace, this.userType).subscribe({
+      next: (res) => this.result = res,
+      error: () => (this.error = 'Could not fetch quality')
+    });
+
+  }
 }

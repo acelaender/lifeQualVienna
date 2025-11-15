@@ -6,6 +6,7 @@ export interface LifeQualResponse {
   adress: string;
   userType: string;
   grade: number;
+  explanation: string;
 }
 
 export interface Place {
@@ -26,11 +27,13 @@ export class AdressService {
   constructor(private http: HttpClient) {
   }
 
-  getGrade(adress: string, userType: string): Observable<LifeQualResponse> {
+  getGrade(place: Place, userType: string): Observable<LifeQualResponse> {
     const params = new HttpParams()
-      .set('adress', adress)
-      .set('userType', userType);
-    return this.http.get<LifeQualResponse>(this.apiUrl, { params });
+      .set('adress', place.adress)
+      .set('x', place.x)
+      .set('y', place.y)
+      .set('usertype', userType);
+    return this.http.get<LifeQualResponse>(this.apiUrl + '/quality', { params });
   }
 
   getPlace(adress: string): Observable<Place[]> {
