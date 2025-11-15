@@ -2,6 +2,7 @@ package at.fhtw.lifequalvienna.controller;
 
 
 import at.fhtw.lifequalvienna.model.Place;
+import at.fhtw.lifequalvienna.model.Response;
 import at.fhtw.lifequalvienna.model.Station;
 import at.fhtw.lifequalvienna.service.AdressValidationService;
 import at.fhtw.lifequalvienna.service.LifeQualViennaService;
@@ -24,20 +25,15 @@ public class LifeQualViennaApiController {
         this.qualityDataCollectionService = qualityDataCollectionService;
     }
 
-    /*
-    @GetMapping
-    public Response getLifeQual(
-            @RequestParam String adress,
-            @RequestParam String userType
-    ) {
-        return lifeQualViennaService.calculateQual(adress, userType);
-    }
-    */
     @GetMapping("/suggestion")
     public List<Place> getSuggestions(@RequestParam String adress) {
-        List<Place> placesTmp = adressValidationService.findPlace(adress);
-
         return adressValidationService.findPlace(adress);
+    }
+
+    @GetMapping("/quality")
+    public Response getQuality(@RequestParam String adress, @RequestParam double x, @RequestParam double y, @RequestParam String usertype) {
+        Place place = new Place(adress, "", "", "", x, y);
+        return lifeQualViennaService.calculateQual(place, usertype);
     }
 
 }

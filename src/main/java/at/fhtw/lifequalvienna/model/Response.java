@@ -3,12 +3,14 @@ package at.fhtw.lifequalvienna.model;
 public class Response {
     private String adress;
     private String userType;
-    private int grade;
+    private double grade;
+    private String explanation;
 
-    public Response(String adress, String userType, int grade) {
+    public Response(String adress, String userType, double grade, String explanation) {
         this.adress = adress;
         this.userType = userType;
         this.grade = grade;
+        this.explanation = explanation;
     }
 
     public Response() {
@@ -22,7 +24,11 @@ public class Response {
         return userType;
     }
 
-    public int getGrade() {
+    public double getGrade() {
         return grade;
+    }
+
+    public String getExplanation() {
+        return explanation;
     }
 }

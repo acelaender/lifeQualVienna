@@ -1,5 +1,6 @@
 package at.fhtw.lifequalvienna.service;
 
+import at.fhtw.lifequalvienna.model.Score;
 import at.fhtw.lifequalvienna.model.Station;
 import at.fhtw.lifequalvienna.model.airQualityModels.WeatherStation;
 import com.opencsv.CSVParserBuilder;
@@ -19,6 +20,8 @@ public class PoliceStationService {
 
     private final List<Station> policeStations = new ArrayList<>();
     private GeoService geoService = new GeoService();
+
+    private final double MAX_DISTANCE = 1000;
 
 
     @PostConstruct
@@ -58,5 +61,29 @@ public class PoliceStationService {
         return policeStations.stream()
                 .min(Comparator.comparingDouble(s -> geoService.distance(lon, lat, s.getLon(), s.getLat())))
                 .orElse(null);
+    }
+
+    public Score calculateScore(double lon, double lat) {
+        Score score = new Score();
+        Station nearestStation = findNearest(lon, lat);
+        //TODO maybe check for null
+
+        score.setExplanation("The nearest police station is: " + nearestStation.getName());
+
+        double distance = geoService.distance(lon, lat, nearestStation.getLon(), nearestStation.getLat());
+
+        score.setExplanation(score.getExplanation() + ", which is " + (int) distance + "m away. This results in a Police-Station score of: ");
+
+
+        if(distance >= MAX_DISTANCE) {
+            score.setScore(0.0);
+        } else {
+            double norm = 1.0 - (distance / MAX_DISTANCE);
+            score.setScore(norm * 100);
+        }
+
+        score.setExplanation(score.getExplanation() + (int) score.getScore() + "%");
+
+        return score;
     }
 }

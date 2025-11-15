@@ -1,6 +1,7 @@
 package at.fhtw.lifequalvienna.service;
 
 
+import at.fhtw.lifequalvienna.model.Score;
 import at.fhtw.lifequalvienna.model.Station;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
@@ -16,6 +17,8 @@ import java.util.List;
 @Service
 public class OeffiStationService {
     private final List<Station> stations = new ArrayList<Station>();
+
+    private final double MAX_DISTANCE = 500;
 
     private GeoService geoService;
 
@@ -58,11 +61,34 @@ public class OeffiStationService {
 
 
 
-    public Station findNearest(double lon, double lat) {
+    private Station findNearest(double lon, double lat) {
         return stations.stream()
                 .min(Comparator.comparingDouble(s -> geoService.distance(lon, lat, s.getLon(), s.getLat())))
                 .orElse(null);
     }
-    //public getOeffiDistance()
+
+    public Score calculateScore(double lon, double lat) {
+        Score score = new Score();
+        Station nearestStation = findNearest(lon, lat);
+        //TODO maybe check for null
+
+        score.setExplanation("The nearest public transportation station is: " + nearestStation.getName());
+
+        double distance = geoService.distance(lon, lat, nearestStation.getLon(), nearestStation.getLat());
+
+        score.setExplanation(score.getExplanation() + ", which is " + (int) distance + "m away. This results in a Public transpo score of: ");
+
+
+        if(distance >= MAX_DISTANCE) {
+            score.setScore(0.0);
+        } else {
+            double norm = 1.0 - (distance / MAX_DISTANCE);
+            score.setScore(norm * 100);
+        }
+
+        score.setExplanation(score.getExplanation() + (int) score.getScore() + "%");
+
+        return score;
+    }
 
 }

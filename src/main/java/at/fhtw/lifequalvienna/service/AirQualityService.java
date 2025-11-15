@@ -97,7 +97,6 @@ public class AirQualityService {
         }
 
         totalScore = (totalScore * 100) / totalWeight;
-        totalScore /= 100;
         System.out.println(totalScore);
         return totalScore;
     }

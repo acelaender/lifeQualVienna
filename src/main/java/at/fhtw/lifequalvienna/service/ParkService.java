@@ -1,5 +1,6 @@
 package at.fhtw.lifequalvienna.service;
 
+import at.fhtw.lifequalvienna.model.Score;
 import at.fhtw.lifequalvienna.model.Station;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
@@ -18,6 +19,8 @@ public class ParkService {
 
     private final List<Station> parks = new ArrayList<>();
     private GeoService geoService = new GeoService();
+
+    private final double MAX_DISTANCE = 1000;
 
 
     @PostConstruct
@@ -57,5 +60,29 @@ public class ParkService {
         return parks.stream()
                 .min(Comparator.comparingDouble(s -> geoService.distance(lon, lat, s.getLon(), s.getLat())))
                 .orElse(null);
+    }
+
+    public Score calculateScore(double lon, double lat) {
+        Score score = new Score();
+        Station nearestStation = findNearest(lon, lat);
+        //TODO maybe check for null
+
+        score.setExplanation("The nearest public park is: " + nearestStation.getName());
+
+        double distance = geoService.distance(lon, lat, nearestStation.getLon(), nearestStation.getLat());
+
+        score.setExplanation(score.getExplanation() + ", which is " + (int) distance + "m away. This results in a Park score of: ");
+
+
+        if(distance >= MAX_DISTANCE) {
+            score.setScore(0.0);
+        } else {
+            double norm = 1.0 - (distance / MAX_DISTANCE);
+            score.setScore(norm * 100);
+        }
+
+        score.setExplanation(score.getExplanation() + (int) score.getScore() + "%");
+
+        return score;
     }
 }
