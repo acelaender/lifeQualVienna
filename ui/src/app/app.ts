@@ -29,6 +29,13 @@ export class App {
 
   onSubmit(event: Event) {
     event.preventDefault();
+
+    // Clear previous state
+    this.suggestions = [];
+    this.selectedPlace = undefined;
+    this.result = undefined;
+    this.error = undefined;
+
     this.adressService.getPlace(this.adress)
       .subscribe({
         next: (res) => this.suggestions = res,
