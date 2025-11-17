@@ -66,7 +66,6 @@ public class PoliceStationService {
     public Score calculateScore(double lon, double lat) {
         Score score = new Score();
         Station nearestStation = findNearest(lon, lat);
-        //TODO maybe check for null
 
         score.setExplanation("The nearest police station is: " + nearestStation.getName());
 

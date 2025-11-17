@@ -11,18 +11,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080/"})
 @RestController
 @RequestMapping("/api/lifequalvienna")
 public class LifeQualViennaApiController {
     private final LifeQualViennaService lifeQualViennaService;
     private final AdressValidationService adressValidationService;
-    private final OeffiStationService qualityDataCollectionService;
 
-    public LifeQualViennaApiController(LifeQualViennaService lifeQualViennaService, AdressValidationService adressValidationService, OeffiStationService qualityDataCollectionService) {
+    public LifeQualViennaApiController(LifeQualViennaService lifeQualViennaService, AdressValidationService adressValidationService) {
         this.lifeQualViennaService = lifeQualViennaService;
         this.adressValidationService = adressValidationService;
-        this.qualityDataCollectionService = qualityDataCollectionService;
     }
 
     @GetMapping("/suggestion")

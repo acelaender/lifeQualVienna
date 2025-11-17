@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./
+    container_name: lq-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - webnet
+
+  frontend:
+    build: ./ui
+    container_name: lq-frontend
+    ports:
+      - "4200:80"
+    networks:
+      - webnet
+    depends_on:
+      - backend
+
+networks:
+  webnet:

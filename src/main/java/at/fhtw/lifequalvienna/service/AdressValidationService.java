@@ -22,7 +22,7 @@ public class AdressValidationService {
     public List<Place> findPlace(String adress) {
         try {
             String encoded = URLEncoder.encode(adress, StandardCharsets.UTF_8);
-            String url = "/GetAddressInfo?Address=" + encoded;
+            String url = "/GetAddressInfo?Address=" + adress;
 
             String responseRaw = webClient.get()
                     .uri(url)
@@ -74,7 +74,6 @@ public class AdressValidationService {
 
             return suggestions;
         } catch (Exception e) {
-            //TODO proper logging
             System.err.println("Fehler bei Adresssuche: " + e.getMessage());
             return List.of();
         }

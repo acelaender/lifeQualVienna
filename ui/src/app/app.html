@@ -11,7 +11,7 @@
     <ul class="suggestions">
       @for(s of suggestions; track s.adress) {
         <li (click)="selectPlace(s)" [class.selected]="selectedPlace === s">
-          {{ s.adress }} {{ s.bezirk }}
+          {{ s.adress }} Bezirk: {{ s.bezirk }}
         </li>
       }
     </ul>
@@ -24,7 +24,7 @@
     <select [(ngModel)]="userType" name="usertype">
       <option value="student">Student</option>
       <option value="family">Family</option>
-      <option value="petowner">Professional</option>
+      <option value="petowner">Pet Owner</option>
     </select>
     <button (click)="onCalculate()">Calculate Quality</button>
   </div>

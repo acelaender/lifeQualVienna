@@ -48,31 +48,20 @@ public class LifeQualViennaService {
         double totalScore = 0;
         String totalExpl = "";
 
-        System.out.println(place.getX() + ", " + place.getY());
-        //TODO
-        System.out.println("place coords: " + place.getX() + ", " + place.getY());
 
         double airScore = airQualityService.getPollutionScore(place.getX(), place.getY());
-        //TODO
-        System.out.println("air score: " + airScore);
         totalScore += ( airScore * user.airQualityWeight );
         totalExpl += "The score for the air-quality is: " + (int) airScore + '\n';
 
         Score oeffiScore = oeffiStationService.calculateScore(place.getX(), place.getY());
-        //TODO
-        System.out.println(oeffiScore.getExplanation());
         totalScore += ( oeffiScore.getScore() * user.transportWeight );
         totalExpl += oeffiScore.getExplanation() + '\n';
 
         Score parkScore = parkService.calculateScore(place.getX(), place.getY());
-        //TODO
-        System.out.println(parkScore.getExplanation());
         totalScore += ( parkScore.getScore() * user.parksWeight );
         totalExpl += parkScore.getExplanation() + '\n';
 
         Score policeScore = policeStationService.calculateScore(place.getX(), place.getY());
-        //TODO
-        System.out.println(policeScore.getExplanation());
         totalScore += ( policeScore.getScore() * user.policeWeight );
         totalExpl += policeScore.getExplanation() + '\n';
 

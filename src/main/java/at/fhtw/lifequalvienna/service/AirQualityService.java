@@ -79,7 +79,6 @@ public class AirQualityService {
             double value = entry.getValue();
 
             if (value < 0.0) {
-                //TODO this should only be visible in debug
                 System.err.println("Pollutant " + pollutant + " has no data available at your station");
                 continue;
             }
