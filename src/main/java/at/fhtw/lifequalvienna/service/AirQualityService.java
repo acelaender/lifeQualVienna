@@ -5,6 +5,7 @@ import at.fhtw.lifequalvienna.model.airQualityModels.WeatherStation;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import jakarta.annotation.PostConstruct;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStreamReader;
@@ -35,6 +36,11 @@ public class AirQualityService {
     private static final String DATA_URL = "https://go.gv.at/l9lumesakt";
 
     @PostConstruct
+    public void init() {
+        loadWeatherStations();
+    }
+
+    @Scheduled(fixedRate = 5 * 60 * 60 * 1000)
     public void loadWeatherStations() {
         try {
             String stationsUrl = "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:LUFTGUETENETZOGD&srsName=EPSG:4326&outputFormat=csv";

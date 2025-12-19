@@ -5,6 +5,7 @@ import at.fhtw.lifequalvienna.model.Station;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import jakarta.annotation.PostConstruct;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStreamReader;
@@ -22,8 +23,13 @@ public class ParkService {
 
     private final double MAX_DISTANCE = 1000;
 
-
     @PostConstruct
+    public void init() {
+        loadParks();
+    }
+
+
+    @Scheduled(fixedRate = 5 * 60 * 60 * 1000)
     public void loadParks() {
         try {
 
